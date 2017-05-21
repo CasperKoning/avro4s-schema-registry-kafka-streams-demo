@@ -17,7 +17,6 @@ object WriteAvroExample {
       val props = new Properties
       props.put(StreamsConfig.APPLICATION_ID_CONFIG, "writer")
       props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092")
-      props.put(StreamsConfig.ZOOKEEPER_CONNECT_CONFIG, "localhost:2181")
       props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest")
       props
     }
@@ -30,7 +29,7 @@ object WriteAvroExample {
     val values = builder.stream(Serdes.String(), Serdes.String(), "values")
 
     values
-      .map((key, value) => (Key(key), Value(value)))
+      .map[Key, Value]((key, value) => (Key(key), Value(value)))
       .to(keySerde, personSerde, "avro-values")
 
     val streams = new KafkaStreams(builder, streamingConfig)

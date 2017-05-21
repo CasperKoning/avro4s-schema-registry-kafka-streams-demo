@@ -17,7 +17,6 @@ object ReadAvroExample {
       val props = new Properties
       props.put(StreamsConfig.APPLICATION_ID_CONFIG, "reader")
       props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092")
-      props.put(StreamsConfig.ZOOKEEPER_CONNECT_CONFIG, "localhost:2181")
       props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest")
       props
     }
@@ -30,7 +29,7 @@ object ReadAvroExample {
     val persons = builder.stream(keySerde, personSerde, "avro-values")
 
     persons
-      .map((key, value) => (key.key, value.value.toUpperCase))
+      .map[String, String]((key, value) => (key.key, value.value.toUpperCase))
       .to(Serdes.String(), Serdes.String(), "upper-case-values")
 
     val streams = new KafkaStreams(builder, streamingConfig)
