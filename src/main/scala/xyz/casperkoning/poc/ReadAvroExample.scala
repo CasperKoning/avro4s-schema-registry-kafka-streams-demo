@@ -30,7 +30,7 @@ object ReadAvroExample {
     val persons = builder.stream(keySerde, personSerde, "avro-values")
 
     persons
-      .map((key, value) => new KeyValue[String, String](key.key, value.value.toUpperCase))
+      .map((key, value) => (key.key, value.value.toUpperCase))
       .to(Serdes.String(), Serdes.String(), "upper-case-values")
 
     val streams = new KafkaStreams(builder, streamingConfig)

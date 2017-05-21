@@ -30,7 +30,7 @@ object WriteAvroExample {
     val values = builder.stream(Serdes.String(), Serdes.String(), "values")
 
     values
-      .map((key, value) => new KeyValue[Key, Value](Key(key), Value(value)))
+      .map((key, value) => (Key(key), Value(value)))
       .to(keySerde, personSerde, "avro-values")
 
     val streams = new KafkaStreams(builder, streamingConfig)
